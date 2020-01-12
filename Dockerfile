@@ -1,7 +1,10 @@
 FROM rancher/k3s
 
-WORKDIR /heroku
-COPY heroku ./
+# nc is missing in the original k3s busybox
+COPY --from=busybox:musl /bin/busybox /bin/busybox
 
-ENTRYPOINT [ "/heroku/entrypoint.sh" ]
-CMD ["server"]
+WORKDIR /app
+COPY app ./
+
+ENTRYPOINT []
+CMD [ "/app/entrypoint.sh", "server" ]

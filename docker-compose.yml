@@ -1,11 +1,11 @@
 version: "3.6"
 
 services:
-  server:
+  web:
     build: .
-    image: mattipaksula/k3s-heroku-server
+    image: registry.heroku.com/${HEROKU_APP:-k3s-server}/web
     volumes:
-      - ./heroku:/heroku
+      - ./app:/app
       - ./kubernetes:/kubernetes
     privileged: true
     environment:
@@ -15,6 +15,9 @@ services:
       - K3S_KUBECONFIG_MODE=666
     ports:
       - 6443:6443
+
+  redis:
+    image: redis:alpine
 
   postgres:
     image: postgres:9.6-alpine

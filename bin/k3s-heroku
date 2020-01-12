@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+_err() {
+  >&2 echo "err: $*"
+  exit 1
+}
+
+export HEROKU_APP=${2:-}
+[ "$HEROKU_APP" = "" ] && _err "app arg required"
+
+
+case "${1:-}" in
+  init)
+    heroku container:login
+    heroku apps:create
+    heroku addons:create heroku-redis:hobby-dev
+    heroku addons:create heroku-postgresql:hobby-dev
+
+    echo "done"
+  ;;
+  delete)
+    heroku apps:delete
+  ;;
+  deploy)
+    heroku container:push web
+    heroku container:release web
+    $0 logs $HEROKU_APP --tail
+  ;;
+  logs)
+    exec heroku logs ${@:3}
+  ;;
+  shell)
+    if [ "${3:-}" = "" ]; then
+      cmd="sh"
+    else
+      cmd=${*:3}
+    fi
+
+    exec heroku run $cmd
+  ;;
+  *)
+    _err "usage"
+  ;;
+esac
