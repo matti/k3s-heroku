@@ -1,5 +1,7 @@
 # k3s-heroku
 
+attempt to run k3s master in heroku
+
 ## install
 
     ln -s $(pwd)/bin/k3s-heroku /usr/local/bin
@@ -22,3 +24,8 @@
 
     ➜  k3s-heroku git:(master) ✗ kubectl --insecure-skip-tls-verify=true get pod
     Error from server (BadRequest): the server rejected our request for an unknown reason
+
+## lol
+
+heroku ps:exec is a hack and won't work.
+ - https://stackoverflow.com/questions/46652928/shell-into-a-docker-container-running-on-a-heroku-dyno-how
