@@ -27,6 +27,9 @@ case "${1:-}" in
     heroku container:release web
     $0 logs $HEROKU_APP --tail
   ;;
+  kubeconfig)
+    exec heroku run /app/kubeconfig get
+  ;;
   logs)
     exec heroku logs ${@:3}
   ;;
